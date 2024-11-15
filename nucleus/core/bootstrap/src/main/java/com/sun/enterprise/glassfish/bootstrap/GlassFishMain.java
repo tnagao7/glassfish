@@ -77,8 +77,12 @@ public class GlassFishMain {
             checkJdkVersion();
 
             final Properties argsAsProps = argsToMap(args);
-            final OsgiPlatform platform = OsgiPlatform.valueOf(whichPlatform());
+            final String platformName = whichPlatform();
+            final OsgiPlatform platform = OsgiPlatform.valueOf(platformName);
             STDOUT.println("Launching GlassFish on " + platform + " platform");
+
+            // Set the system property if downstream code wants to know about it
+            System.setProperty(PLATFORM_PROPERTY_KEY, platformName);
 
             final Path instanceRoot = findInstanceRoot(installRoot, argsAsProps);
             final ServerFiles files = new ServerFiles(installRoot.toPath(), instanceRoot);
